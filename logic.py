@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.stats import norm
 
+# Betweem -----------------------------------------------------
 def round4_between(mean_data,std_dev_data,lower_bound,upper_bound):
     z_lower = round((lower_bound - mean_data) / std_dev_data,2)
     z_upper = round((upper_bound - mean_data) / std_dev_data,2)
@@ -25,7 +26,23 @@ def accurate_between(mean_data,std_dev_data,lower_bound,upper_bound):
     probability = (p_upper - p_lower)
     
     return probability
+# Betweem -----------------------------------------------------
 
+# Greater Than -----------------------------------------------------
+def round4_greater_than(mean_data,std_dev_data,bound):
+    z = round((bound - mean_data) / std_dev_data,2)
+    p = round(norm.cdf(z),4)
+    probability = round((1-p),4)
+    
+    return probability
+
+def accurate_greater_than(mean_data,std_dev_data,bound):
+    z = (bound - mean_data) / std_dev_data
+    p = norm.cdf(z)
+    probability = (1-p)
+    
+    return probability
+# Greater Than -----------------------------------------------------
 
 
 file_path = "./Datasets/SOCR-HeightWeight.csv" 
@@ -52,14 +69,23 @@ while True:
 
 data = df[selected_column]
 
-lower_bound = 65
-upper_bound = 70
+print('Minmum Height:',data.min())
+print('Maximum Height:',data.max())
 
 mean_data = round(np.mean(data),4)
 std_dev_data = round(np.std(data, ddof=0),4)
 
-probability = round4_between(mean_data,std_dev_data,lower_bound,upper_bound)
-probability_acc = accurate_between(mean_data,std_dev_data,lower_bound,upper_bound)
+# lower_bound = 65
+# upper_bound = 70
 
-print(f"Probability of {lower_bound} <= X <= {upper_bound} is {probability} or {probability*100}%")
-print(f"Probability of {lower_bound} <= X <= {upper_bound} is {probability_acc} or {probability_acc*100}%")
+# probability = round4_between(mean_data,std_dev_data,lower_bound,upper_bound)
+# probability_acc = accurate_between(mean_data,std_dev_data,lower_bound,upper_bound)
+
+# print(f"Probability of {lower_bound} <= X <= {upper_bound} is {probability} or {probability*100}%")
+# print(f"Probability of {lower_bound} <= X <= {upper_bound} is {probability_acc} or {probability_acc*100}%")
+
+bound = 60
+probability = round4_greater_than(mean_data,std_dev_data,bound)
+probability_acc = round4_greater_than(mean_data,std_dev_data,bound)
+print(f"Probability of X >= {bound} is {probability} or {probability*100}%")
+print(f"Probability of X >= {bound} is {probability_acc} or {probability_acc*100}%")
