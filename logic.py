@@ -16,7 +16,7 @@ def round4_between(mean_data,std_dev_data,lower_bound,upper_bound):
     
     return probability
 
-def accurate_between(mean_data,std_dev_data,lower_bound,upper_bound):
+def between(mean_data,std_dev_data,lower_bound,upper_bound):
     z_lower = (lower_bound - mean_data) / std_dev_data
     z_upper = (upper_bound - mean_data) / std_dev_data
     p_lower = norm.cdf(z_lower)
@@ -36,7 +36,23 @@ def round4_greater_than(mean_data,std_dev_data,bound):
     
     return probability
 
-def accurate_greater_than(mean_data,std_dev_data,bound):
+def greater_than(mean_data,std_dev_data,bound):
+    z = (bound - mean_data) / std_dev_data
+    p = norm.cdf(z)
+    probability = (1-p)
+    
+    return probability
+# Greater Than -----------------------------------------------------
+
+# Greater Than -----------------------------------------------------
+def round4_less_than(mean_data,std_dev_data,bound):
+    z = round((bound - mean_data) / std_dev_data,2)
+    p = round(norm.cdf(z),4)
+    probability = round((1-p),4)
+    
+    return probability
+
+def less_than(mean_data,std_dev_data,bound):
     z = (bound - mean_data) / std_dev_data
     p = norm.cdf(z)
     probability = (1-p)
@@ -86,6 +102,6 @@ std_dev_data = round(np.std(data, ddof=0),4)
 
 bound = 60
 probability = round4_greater_than(mean_data,std_dev_data,bound)
-probability_acc = round4_greater_than(mean_data,std_dev_data,bound)
+probability_acc = greater_than(mean_data,std_dev_data,bound)
 print(f"Probability of X >= {bound} is {probability} or {probability*100}%")
 print(f"Probability of X >= {bound} is {probability_acc} or {probability_acc*100}%")
