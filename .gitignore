@@ -1,1 +1,2 @@
-virtualenv
+venv
+node_modules
