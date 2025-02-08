@@ -10,6 +10,7 @@ module.exports = {
         'container': '#fffefe',
         'primary-text': '#3b3b3b',
         'input-box': '#eff2f9',
+        'btn': '#6e01fe',
       },
       fontFamily: {
         lato: ["Lato", 'serif'],

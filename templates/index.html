@@ -6,7 +6,7 @@
 
 {% block content %}
   {% load static %}
-
+{% csrf_token %}
   <body class="bg-background p-8 font-lato h-full">
     <div>
       <h1 class="text-xl font-bold text-primary capitalize">probability normal distribution</h1>
@@ -17,7 +17,7 @@
       {% comment %}COL 2{% endcomment %}
       <div class="flex flex-col justify-around gap-4 w-1/2 h-auto">
         {% comment %}Container 1{% endcomment %}
-        <div class="bg-container w-full h-1/2 rounded-md flex flex-col">
+        <div class="bg-container w-full h-[50vh] rounded-md flex flex-col">
           {% comment %}Title and Full Screen{% endcomment %}
           <div class="flex flex-row justify-between m-3">
             <p class="text-sm font-bold">Normal Distribution</p>
@@ -33,7 +33,7 @@
           </div>
         </div>
 
-        <div class="bg-container w-full h-1/2 rounded-md flex flex-col">
+        <div class="bg-container w-full h-[50vh] rounded-md flex flex-col">
             {% comment %}Title and Full Screen{% endcomment %}
             <div class="flex flex-row justify-between m-3">
               <p class="text-sm font-bold">Normal Distribution</p>
@@ -54,15 +54,24 @@
       {% comment %}COL 2{% endcomment %}
       <div class="flex flex-col justify-around gap-4 w-1/2 h-auto">
         {% comment %}Container 1{% endcomment %}
-        <div class="bg-container w-full h-1/2 rounded-md flex flex-col">
+        <div class="bg-container w-full h-[50vh] rounded-md flex flex-col">
           {% comment %}Title and Full Screen{% endcomment %}
           <div class="flex flex-row gap-1 m-3 item">
-            {% comment %} <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" class="fill-primary-text size-4"><path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/></svg> {% endcomment %}
             <p class="text-sm font-bold">Input Controls</p>
           </div>
 
-          <div class="h-4/5 w-full px-3 pt-3">
-            
+          <div class="w-full px-3 flex flex-col gap-4">
+            <div class="flex flex-row gap-1 justify-arround">
+                <p id="dataset" class="w-max text-sm font-bold bg-input-box px-3 py-2 rounded-sm">
+                    Selected Dataset : Height
+                </p>
+                <p id="maxval" class="w-max text-sm font-bold bg-input-box px-3 py-2 rounded-sm">
+                    MAX : 
+                </p>
+                <p id="minval" class="w-max text-sm font-bold bg-input-box px-3 py-2 rounded-sm">
+                    MAX : 
+                </p>
+            </div>
 
             {% comment %} INPUT F1 {% endcomment %}
             <div class="relative inline-block w-full rounded-md bg-input-box">
@@ -98,21 +107,129 @@
             </div>
 
             <div class="flex flex-row gap-2 justify-center items-center">
-                <input type="number" class="w-full mt-2 rounded-md bg-input-box p-2 text-sm outline-none" placeholder="Enter a value(x)" />
-                {% comment %} <span class="text-xl">
-                    &lt;
-                </span> {% endcomment %}
-                <input type="number" class="w-full mt-2 rounded-md bg-input-box p-2 text-sm outline-none" placeholder="Enter a value(y)" />
+                <input id="inp1" type="number" oninput="updatedStatement()" class="w-full rounded-md bg-input-box p-2 text-sm outline-none" placeholder="Enter a value(x)" />
+                <input id="inp2" type="number" oninput="updatedStatement()" class="w-full rounded-md bg-input-box p-2 text-sm outline-none" placeholder="Enter a value(y)" />
             </div>
             
-            <div class="flex flex-row gap-1 mt-2">
-                <span id="xval" class="text-sm"></span>
-                    
-                </span>
+
+            <div class="flex flex-row gap-1 justify-center items-center text-sm border outline-b-gray-500 p-1 ">
+                Probability = 
+                <p id="statment" class="text-sm font-bold bg-input-box px-3 py-2 rounded-sm">
+                    ----
+                </p>
+            </div>
+
+            <div class="flex flex-row gap-1 justify-center mb-3">
+                <button class="w-1/2 bg-primary text-white rounded-md p-2 text-sm bg-btn" onclick="calculate()">Calculate</button>
+                <button class="w-1/2 bg-primary text-white rounded-md p-2 text-sm bg-btn">Reset</button>
             </div>
 
 
             <script>
+                function getCSRFToken() {
+                    let cookieValue = null;
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.startsWith('csrftoken=')) {
+                            cookieValue = cookie.substring('csrftoken='.length, cookie.length);
+                            break;
+                        }
+                    }
+                    return cookieValue;
+                }
+                
+                async function postData(url, data) {
+                    const csrftoken = getCSRFToken();
+                
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": csrftoken  // Attach CSRF token
+                        },
+                        body: JSON.stringify(data)
+                    });
+                
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                
+                    return await response.json();  // Parse JSON response
+                }
+                
+                
+                
+
+                function calculate(){
+                    const x = document.getElementById('inp1').value;
+                    const y = document.getElementById('inp2').value;
+                    const label = document.getElementById('dropdownLabel');
+                    var newx = 0;
+                    var newy = 0;
+                    var newoption = '';
+                    option = label.textContent;
+                    if(option == 'P(𝑥<y)'){
+                        newy = y-1;
+                        newoption = 'lessthan';
+                    }
+                    else if(option == 'P(𝑥>y)') {
+                        newy = y-1;
+                        newoption = 'greaterthan';
+                    }
+                    else if(option == 'P(𝑥<=y)') {
+                        newy = y;
+                        newoption = 'lessthan';
+                    }
+                    else if(option == 'P(𝑥>=y)') {
+                        newy = y;
+                        newoption = 'greaterthan';
+                    }
+                    else if(option == 'P(x<𝑥<y)') {
+                        newy = y-1;
+                        newx = x-1;
+                        newoption = 'between'
+                    }
+                    else if(option == 'P(x<=𝑥<=y)') {
+                        newy = y;
+                        newx = x;
+                        newoption = 'between'
+                    }
+                    senddata = {
+                        'x': newx,
+                        'y': newy,
+                        'option': newoption
+                    }
+                    postData("/calculate/", senddata)
+                    .then(data => console.log("Success:", data))
+                    .catch(error => console.error("Error:", error));
+                }
+
+                function updatedStatement(){
+                    const x = document.getElementById('inp1').value;
+                    const y = document.getElementById('inp2').value;
+                    const statement = document.getElementById('statment');
+                    const label = document.getElementById('dropdownLabel');
+                    option = label.textContent;
+                    if(option == 'P(𝑥<y)'){
+                        statement.textContent = `P(𝑥<${y})`;
+                    }
+                    else if(option == 'P(𝑥>y)') {
+                        statement.textContent = `P(𝑥>${y})`;
+                    }
+                    else if(option == 'P(𝑥<=y)') {
+                        statement.textContent = `P(𝑥<=${y})`;
+                    }
+                    else if(option == 'P(𝑥>=y)') {
+                        statement.textContent = `P(𝑥>=${y})`;
+                    }
+                    else if(option == 'P(x<𝑥<y)') {
+                        statement.textContent = `P(${x}<𝑥<${y})`;
+                    }
+                    else if(option == 'P(x<=𝑥<=y)') {
+                        statement.textContent = `P(${x}<=𝑥<=${y})`;
+                    }
+                }
                 function toggleDropdown() {
                     const menu = document.getElementById('dropdownMenu');
                     const icon = document.getElementById('basic-dropdown-icon');
@@ -125,7 +242,14 @@
                     const label = document.getElementById('dropdownLabel');
                     label.textContent = option;
                     console.log(option);
+                    if(option == 'P(𝑥<y)' || option == 'P(𝑥>y)' || option == 'P(𝑥<=y)' || option == 'P(𝑥>=y)') {
+                        document.getElementById('inp1').classList.add('hidden');
+                    }
+                    else{
+                        document.getElementById('inp1').classList.remove('hidden');
+                    }
                     toggleDropdown();
+                    updatedStatement();
                 }
                 
                 document.addEventListener('click', (e) => {
@@ -143,19 +267,38 @@
           </div>
         </div>
 
-        <div class="bg-container w-full h-1/2 rounded-md flex flex-col">
+        <div class="bg-container w-full h-[50vh] rounded-md flex flex-col">
           {% comment %}Title and Full Screen{% endcomment %}
           <div class="flex flex-row justify-between m-3">
-            <p class="text-sm font-bold">Normal Distribution</p>
-            <button class="w-5 h-5 bg-input-box p-1 rounded-sm">
-              <svg class="fill-primary-text w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                <path d="M120-120v-200h80v120h120v80H120Zm520 0v-80h120v-120h80v200H640ZM120-640v-200h200v80H200v120h-80Zm640 0v-120H640v-80h200v200h-80Z" />
-              </svg>
-            </button>
+            <p class="text-sm font-bold">Result</p>
           </div>
 
-          <div class="h-4/5 w-full px-3 pt-3">
-            <canvas id="chart1" class="w-full h-full"></canvas>
+          <div class="block h-4/5 w-full px-3 pt-3">
+            
+            <div class="mb-4 flex flex-row gap-2">
+
+                <div class="inline-flex p-3 text-2xl font-bold text-white rounded-md" style="background-color: #fe956c;">
+                    0.2545754878
+                </div>
+
+                <div class="flex flex-col">
+                    <p class="text-sm font-bold">Probability</p>
+                    <p class="text-xs text-gray-400">P(𝑥>=y)</p>
+                </div>
+            </div>
+
+
+            <div class="mb-4 flex flex-row gap-2">
+
+                <div class="inline-flex p-3 text-2xl font-bold text-white rounded-md" style="background-color: #6d56fc;">
+                    98.236625454
+                </div>
+    
+                <div class="flex flex-col">
+                    <p class="text-sm font-bold">Probability in(%)</p>
+                    <p class="text-xs text-gray-400">P(𝑥>=y)</p>
+                </div>
+            </div>
           </div>
         </div>
 

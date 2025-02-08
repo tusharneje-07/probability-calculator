@@ -68,21 +68,21 @@ function displayChart1(dataArray, lowerBound, upperBound, condition) {
                 {
                     label: "Normal Distribution",
                     data: normalData,
-                    borderColor: "blue",
-                    backgroundColor: "rgba(0, 0, 255, 0.2)",
-                    fill: false,
-                    pointRadius: 0,
-                    borderWidth: 2
-                },
-                {
-                    label: "Highlighted Range",
-                    data: highlightData,
-                    borderColor: "red",
-                    backgroundColor: "rgba(255, 99, 132, 0.5)",
+                    borderColor: "rgba(255,120,72,255)",
+                    backgroundColor: "rgba(255,120,72,0.5)",
                     fill: true,
                     pointRadius: 0,
                     borderWidth: 2
-                }
+                },
+                // {
+                //     // label: "Highlighted Range",
+                //     // data: highlightData,
+                //     // borderColor: "red",
+                //     // backgroundColor: "rgba(255, 99, 132, 0.5)",
+                //     // fill: true,
+                //     // pointRadius: 0,
+                //     // borderWidth: 2
+                // }
             ]
         },
         options: {
@@ -156,17 +156,17 @@ function displayChart2(dataArray, lowerBound, upperBound, condition) {
                 {
                     label: "Normal Distribution",
                     data: normalData,
-                    borderColor: "blue",
-                    backgroundColor: "rgba(0, 0, 255, 0.2)",
+                    borderColor: "rgba(255,120,72,255)",
+                    backgroundColor: "rgba(255,120,72,0.5)",
                     fill: false,
                     pointRadius: 0,
                     borderWidth: 2
                 },
                 {
-                    label: "Highlighted Range",
+                    label: `Probability ${condition}`,
                     data: highlightData,
-                    borderColor: "red",
-                    backgroundColor: "rgba(255, 99, 132, 0.5)",
+                    borderColor: "rgba(232, 53, 53,1)",
+                    backgroundColor: "rgba(232, 53, 53,0.5)",
                     fill: true,
                     pointRadius: 0,
                     borderWidth: 2
