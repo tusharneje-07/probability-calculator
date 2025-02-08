@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Normal Distribution Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <label for="condition">Select Condition:</label>
+    <select id="condition">
+        <option value="greater">Greater than Bound</option>
+        <option value="less">Less than Bound</option>
+        <option value="greater-equal">Greater than or Equal to Bound</option>
+        <option value="less-equal">Less than or Equal to Bound</option>
+        <option value="between">Greater than Lower & Less than Upper</option>
+        <option value="between-equal">Between (Inclusive)</option>
+    </select>
+
+    <button onclick="generateChart()">Generate Chart</button>
+    <canvas id="normalChart"></canvas>
+
+<script>
+    let chartInstance = null;
+
+    function calculateMean(data) {
+        return data.reduce((sum, value) => sum + value, 0) / data.length;
+    }
+
+    function calculateStandardDeviation(data, mean) {
+        let variance = data.reduce((sum, value) => sum + Math.pow(value - mean, 2), 0) / data.length;
+        return Math.sqrt(variance);
+    }
+
+    function normalDistribution(x, mean, stdDev) {
+        return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * 
+               Math.exp(-((x - mean) ** 2) / (2 * stdDev ** 2));
+    }
+
+    function displayChart(dataArray, lowerBound, upperBound, condition) {
+        if (chartInstance) {
+            chartInstance.destroy(); // Clear old graph
+        }
+
+        let mean = calculateMean(dataArray);
+        let stdDev = calculateStandardDeviation(dataArray, mean);
+
+        let normalData = [];
+        let highlightData = [];
+
+        let minX = Math.min(...dataArray);
+        let maxX = Math.max(...dataArray);
+
+        for (let x = minX; x <= maxX; x += 0.5) {
+            let yValue = normalDistribution(x, mean, stdDev);
+            normalData.push({ x: x, y: yValue });
+
+            let shouldHighlight = false;
+            switch (condition) {
+                case "greater":
+                    shouldHighlight = x > lowerBound;
+                    break;
+                case "less":
+                    shouldHighlight = x < lowerBound;
+                    break;
+                case "greater-equal":
+                    shouldHighlight = x >= lowerBound;
+                    break;
+                case "less-equal":
+                    shouldHighlight = x <= lowerBound;
+                    break;
+                case "between":
+                    shouldHighlight = x > lowerBound && x < upperBound;
+                    break;
+                case "between-equal":
+                    shouldHighlight = x >= lowerBound && x <= upperBound;
+                    break;
+            }
+
+            if (shouldHighlight) {
+                highlightData.push({ x: x, y: yValue });
+            }
+        }
+
+        const ctx = document.getElementById('normalChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: "Normal Distribution",
+                        data: normalData,
+                        borderColor: "blue",
+                        backgroundColor: "rgba(0, 0, 255, 0.2)",
+                        fill: false,
+                        pointRadius: 0,
+                        borderWidth: 2
+                    },
+                    {
+                        label: "Highlighted Range",
+                        data: highlightData,
+                        borderColor: "red",
+                        backgroundColor: "rgba(255, 99, 132, 0.5)",
+                        fill: true,
+                        pointRadius: 0,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        position: 'bottom',
+                        title: { display: true, text: "X (Data Points)" }
+                    },
+                    y: {
+                        title: { display: true, text: "Probability Density" },
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    }
+
+    function generateChart() {
+        let dataArray = [88, 113, 93, 97, 110, 109, 98, 115, 110, 94, 86, 110, 97, 88, 108, 95, 111, 91, 111, 113, 98, 86, 92, 87, 88, 98, 87, 119, 94, 106, 117, 112, 118, 106, 96, 96, 118, 108, 84, 113, 85, 96, 93, 86, 116, 116, 94, 108, 119, 109, 83, 86, 116, 96, 115, 108, 111, 115, 109, 117, 104, 96, 95, 118, 87, 113, 93, 85, 111, 95, 109, 116, 94, 83, 109, 118, 112, 117, 88, 92, 91, 121, 111, 85, 116, 88, 117, 109, 117, 108, 117, 114, 92, 86, 95, 94, 118, 95, 91, 118, 110, 86, 88, 119, 89, 86, 92, 90, 118, 118, 94, 117, 109, 111, 91, 118, 95, 108, 117, 87, 87, 109, 93, 119, 97, 85, 98, 109, 87, 96, 93, 111, 83, 86, 112, 118, 109, 87, 100, 96, 94, 85, 111, 87, 87, 118, 88, 117, 107, 88, 117, 85, 117, 116, 86, 95, 111, 118, 110, 93, 86, 119, 108, 92, 117, 86, 109, 85, 88, 119, 120, 110, 117, 88, 89, 98, 115, 108, 88, 115, 117, 108, 110, 107, 96, 88, 93, 91, 116, 111, 93, 94, 89, 85, 96, 89, 118, 112, 108, 117];
+        let lowerBound = 88;
+        let upperBound = 100;
+        let condition = document.getElementById("condition").value;
+
+        displayChart(dataArray, lowerBound, upperBound, condition);
+    }
+</script>
+
+</body>
+</html>
