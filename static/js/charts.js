@@ -1,5 +1,24 @@
 let chartInstance = null;
 let chartInstance2 = null;
+function createPattern() {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    
+    // Set pattern size
+    canvas.width = 10;
+    canvas.height = 10;
+
+    // Draw diagonal lines pattern
+    ctx.strokeStyle = "rgba(109, 87, 255, 0.6)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(10, 10);
+    ctx.stroke();
+
+    return ctx.createPattern(canvas, "repeat");
+}
+
 
 function calculateMean(data) {
     return data.reduce((sum, value) => sum + value, 0) / data.length;
@@ -107,7 +126,7 @@ function displayChart2(dataArray, lowerBound, upperBound, condition) {
     if (chartInstance2) {
         chartInstance2.destroy();
     }
-
+    const pattern = createPattern();
     let mean = calculateMean(dataArray);
     let stdDev = calculateStandardDeviation(dataArray, mean);
 
@@ -156,17 +175,17 @@ function displayChart2(dataArray, lowerBound, upperBound, condition) {
                 {
                     label: "Normal Distribution",
                     data: normalData,
-                    borderColor: "rgba(255,120,72,255)",
-                    backgroundColor: "rgba(255,120,72,0.5)",
-                    fill: false,
+                    borderColor: "rgba(109, 87, 255,255)",
+                    backgroundColor: "rgba(109, 87, 255,0.2)",
+                    fill: true,
                     pointRadius: 0,
                     borderWidth: 2
                 },
                 {
                     label: `Probability ${condition}`,
                     data: highlightData,
-                    borderColor: "rgba(232, 53, 53,1)",
-                    backgroundColor: "rgba(232, 53, 53,0.5)",
+                    borderColor: "rgba(109, 87, 255,1)",
+                    backgroundColor: pattern,
                     fill: true,
                     pointRadius: 0,
                     borderWidth: 2
