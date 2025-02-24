@@ -8,9 +8,9 @@ from django.conf import settings
 
 def demo(request):
     try:
-        csv_path = os.path.join(settings.BASE_DIR, "Datasets", "SOCR-HeightWeight.csv")
+        csv_path = os.path.join(settings.BASE_DIR, "Datasets", "District_PGI_Table_4.csv")
         csv_to_df = CSVtoDataFrame(csv_path)
-        csv_to_df.select_column(1)
+        csv_to_df.select_column(3)
         data = csv_to_df.get_selected_data_frame()
         data = {
             'min':csv_to_df.get_min(),
@@ -33,9 +33,9 @@ def calculate(request):
         x = data['x']
         option = data['option']
         state = data['state']
-        csv_path = os.path.join(settings.BASE_DIR, "Datasets", "SOCR-HeightWeight.csv")
+        csv_path = os.path.join(settings.BASE_DIR, "Datasets", "District_PGI_Table_4.csv")
         csv_to_df = CSVtoDataFrame(csv_path)
-        csv_to_df.select_column(1)
+        csv_to_df.select_column(3)
         data = csv_to_df.get_selected_data_frame()
         
         if state:
