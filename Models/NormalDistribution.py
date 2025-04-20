@@ -26,9 +26,6 @@ class Normal:
         p = norm.cdf(z)
         return p
     
-    def get_z_value(self,bound):
-        return norm.cdf((bound - self.mean) / self.std_dev)
-    
     def get_mean(self):
         return self.mean
 

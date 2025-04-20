@@ -9,13 +9,8 @@
 {% csrf_token %}
 <script>
 </script>
-  <body class="bg-background p-8 font-lato h-full">
-    <div>
-      <h1 class="text-xl font-bold text-primary capitalize">probability normal distribution</h1>
-      <p class="text-xs">The normal distribution is a continuous probability distribution that is symmetric around the mean, where most values cluster around the central peak, following a bell-shaped curve.</p>
-    </div>
-
-    <div class="w-full h-full mt-2 flex flex-row justify-stretch gap-4">
+  <body class="bg-background p-3 font-lato h-full">
+    <div class="w-full h-full flex flex-row justify-stretch gap-4">
       {% comment %}COL 2{% endcomment %}
       <div class="flex flex-col justify-around gap-4 w-1/2 h-auto">
         {% comment %}Container 1{% endcomment %}
@@ -147,11 +142,11 @@
 
         <div class="bg-container w-full h-[50vh] rounded-md flex flex-col">
           {% comment %}Title and Full Screen{% endcomment %}
-          <div class="flex flex-row justify-between m-3">
+          <div class="flex flex-row justify-between m-3 mb-1">
             <p class="text-sm font-bold">Result</p>
           </div>
 
-          <div class="block h-4/5 w-full px-3 pt-3">
+          <div class="block h-4/5 w-full px-3">
             
             <div class="mb-4 flex flex-row gap-2">
 
@@ -181,7 +176,7 @@
             <div class="mb-4 flex flex-row gap-2">
 
                 <div id="mean" class="inline-flex p-3 items-center text-2xl font-bold text-white rounded-md" style="background-color: #6d56fc;">
-                    0.00
+                    {{mean}}
                 </div>
     
                 <div class="flex flex-col">
@@ -191,6 +186,20 @@
                     </p>
                 </div>
             </div>
+
+            <div class="mb-4 flex flex-row gap-2">
+
+              <div id="std_dev" class="inline-flex p-3 items-center text-2xl font-bold text-white rounded-md" style="background-color: #6d56fc;">
+                  {{std_dev}}
+              </div>
+  
+              <div class="flex flex-col">
+                  <p class="text-sm font-bold">Standard Deviation</p>
+                  <p class="text-xs text-gray-400">
+                    \[\sigma = \sqrt{ \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu)^2 }\]
+                  </p>
+              </div>
+          </div>
           </div>
         </div>
 

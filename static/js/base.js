@@ -131,6 +131,7 @@ function calculate(){
                 document.getElementById('optionof2').innerHTML = option + ' x 100'
             }
         }
+        document.getElementById('std_dev').innerHTML = data.std_dev
     }
     )
     .catch(error => console.error("Error:", error));
